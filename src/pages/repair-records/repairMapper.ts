@@ -1,5 +1,5 @@
 import type { CreateRepairRecordDto, RepairRecordApi, UpdateRepairRecordDto } from '@/interfaces/all/repairRecord'
-import type { IssueCategory, RepairRecord } from '@/pages/dashboard/types'
+import type { IssueCategory, RepairPhoto, RepairRecord } from '@/pages/dashboard/types'
 
 export type RepairFormData = {
   workOrderId: string
@@ -10,6 +10,7 @@ export type RepairFormData = {
   partsReplaced: Array<{ name: string; partNumber: string; cost: number }>
   laborCost: number
   technicianId: string
+  photos?: RepairPhoto[]
 }
 
 function formatDate(value: string): string {
@@ -54,7 +55,7 @@ export function formToCreateRepairDto(form: RepairFormData): CreateRepairRecordD
     labor_cost: form.laborCost,
     total_cost: partsCost + form.laborCost,
     technician_id: form.technicianId,
-    photos: [],
+    photos: form.photos ?? [],
   }
 }
 

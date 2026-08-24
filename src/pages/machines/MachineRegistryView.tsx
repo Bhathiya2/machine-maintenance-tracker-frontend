@@ -292,17 +292,8 @@ export function MachineRegistryView({
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-1 flex-col gap-2 sm:flex-row">
-          <div className="relative min-w-[220px] flex-1">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-            <input
-              className="w-full rounded-lg border border-border bg-card py-2.5 pl-9 pr-4 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
-              placeholder="Search ID, name, site, model…"
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-            />
-          </div>
           <select
-            className={`${selectCls} sm:w-44`}
+            className={`${selectCls} sm:w-52`}
             value={statusFilter}
             onChange={(event) => setStatusFilter(event.target.value as MachineStatus | 'All')}
           >

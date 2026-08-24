@@ -8,10 +8,10 @@ import { DashboardSidebar } from './DashboardSidebar'
 function DashboardLayoutInner() {
   const location = useLocation()
   const view = viewFromPath(location.pathname)
-  const { currentUser, unreadCount, openFaultCount, machines, workOrders, faultReports, users } =
+  const { currentUser, unreadCount, openFaultCount, machines, workOrders, faultReports, users, repairRecords, notifications } =
     useDashboardContext()
   const sidebar = useDashboardSidebar()
-  const header = useDashboardHeader(view, { machines, workOrders, faultReports, users })
+  const header = useDashboardHeader(view, { machines, workOrders, faultReports, users, repairRecords, notifications })
 
   return (
     <div className="flex min-h-screen bg-background">

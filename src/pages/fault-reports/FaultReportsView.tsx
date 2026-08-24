@@ -178,7 +178,7 @@ export function FaultReportsView({
           <p className={`mt-0.5 text-2xl font-bold ${stats.high > 0 ? 'text-foreground' : 'text-muted-foreground'}`}>{stats.high}</p>
         </Card>
         <Card className="p-4">
-          <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground">Converted to WO</p>
+          <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground">Converted to Work Orders</p>
           <p className="mt-0.5 text-2xl font-bold text-green-600">{stats.converted}</p>
         </Card>
       </div>

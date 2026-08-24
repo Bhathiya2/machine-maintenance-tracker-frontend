@@ -67,6 +67,8 @@ export function RepairRecordsView({
   const [partName, setPartName] = useState("");
   const [partNumber, setPartNumber] = useState("");
   const [partCost, setPartCost] = useState("");
+  const [photoCaption, setPhotoCaption] = useState("");
+  const [photoType, setPhotoType] = useState<"before" | "after">("before");
 
   const getMachineName = (id: string) =>
     machines.find((m) => m.id === id)?.name ?? id;
@@ -99,6 +101,8 @@ export function RepairRecordsView({
     setPartName("");
     setPartNumber("");
     setPartCost("");
+    setPhotoCaption("");
+    setPhotoType("before");
     setShowCreate(true);
   };
 
@@ -428,14 +432,44 @@ export function RepairRecordsView({
                 )}
               </Card>
               <Card className="overflow-hidden">
-                <div className="px-5 py-3 border-b border-border flex items-center gap-2">
-                  <Camera size={15} className="text-muted-foreground" />
-                  <h3 className="font-semibold text-sm text-foreground">
-                    Photo Gallery
-                  </h3>
-                  <span className="text-xs text-muted-foreground font-mono ml-auto">
-                    {selectedRecord.photos.length} photos
-                  </span>
+                <div className="px-5 py-3 border-b border-border flex items-center justify-between bg-muted/20">
+                  <div className="flex items-center gap-2">
+                    <Camera size={15} className="text-primary" />
+                    <h3 className="font-semibold text-sm text-foreground">
+                      Photo Gallery
+                    </h3>
+                    <span className="text-xs text-muted-foreground font-mono">
+                      ({selectedRecord.photos.length})
+                    </span>
+                  </div>
+                  <label className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-primary/10 hover:bg-primary/20 text-primary text-xs font-semibold cursor-pointer transition-colors">
+                    <Plus size={13} />
+                    <span>Upload Photo</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (!file || !selectedRecord) return;
+                        const reader = new FileReader();
+                        reader.onload = (evt) => {
+                          const url = evt.target?.result as string;
+                          if (!url) return;
+                          const newPhoto: RepairPhoto = {
+                            id: `ph-${Date.now()}`,
+                            url,
+                            type: "after",
+                            caption: file.name,
+                          };
+                          const updatedPhotos = [...selectedRecord.photos, newPhoto];
+                          setSelectedRecord({ ...selectedRecord, photos: updatedPhotos });
+                        };
+                        reader.readAsDataURL(file);
+                        e.target.value = "";
+                      }}
+                    />
+                  </label>
                 </div>
                 {selectedRecord.photos.length === 0 ? (
                   <p className="px-5 py-4 text-sm text-muted-foreground italic">
@@ -710,6 +744,86 @@ export function RepairRecordsView({
                       <Plus size={14} />
                     </button>
                   </div>
+                </div>
+              </div>
+              <div className="space-y-2 pt-3 border-t border-border">
+                <div className="flex items-center justify-between">
+                  <p className="text-xs font-mono text-muted-foreground uppercase tracking-wider">
+                    Photo Attachments (optional)
+                  </p>
+                  <span className="text-[10px] text-muted-foreground">
+                    {(form.photos ?? []).length} photo(s) attached
+                  </span>
+                </div>
+
+                {(form.photos ?? []).length > 0 && (
+                  <div className="grid grid-cols-2 gap-2 my-2">
+                    {(form.photos ?? []).map((photo) => (
+                      <div key={photo.id} className="relative aspect-video rounded-lg overflow-hidden border border-border bg-muted/40 group">
+                        <img src={photo.url} alt={photo.caption} className="w-full h-full object-cover" />
+                        <div className="absolute inset-0 bg-black/50 p-2 flex flex-col justify-between opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button
+                            type="button"
+                            onClick={() => setForm({ ...form, photos: (form.photos ?? []).filter((p) => p.id !== photo.id) })}
+                            className="self-end p-1 rounded bg-red-600 text-white hover:bg-red-700"
+                          >
+                            <X size={12} />
+                          </button>
+                          <span className="text-[10px] font-semibold text-white truncate bg-black/60 px-1.5 py-0.5 rounded">
+                            {photo.type.toUpperCase()}: {photo.caption}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <div className="grid grid-cols-3 gap-2 items-center">
+                  <select
+                    className={selectCls + " text-xs"}
+                    value={photoType}
+                    onChange={(e) => setPhotoType(e.target.value as "before" | "after")}
+                  >
+                    <option value="before">Before / Damage</option>
+                    <option value="after">After / Repaired</option>
+                  </select>
+                  <input
+                    className={inputCls + " text-xs"}
+                    placeholder="Photo caption…"
+                    value={photoCaption}
+                    onChange={(e) => setPhotoCaption(e.target.value)}
+                  />
+                  <label className="flex items-center justify-center gap-1.5 h-9 px-3 rounded-lg border border-border bg-card hover:bg-muted text-xs font-semibold cursor-pointer transition-colors">
+                    <Camera size={14} className="text-primary" />
+                    <span>Choose Photo</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        const reader = new FileReader();
+                        reader.onload = (evt) => {
+                          const url = evt.target?.result as string;
+                          if (!url) return;
+                          const newPhoto: RepairPhoto = {
+                            id: `ph-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+                            url,
+                            type: photoType,
+                            caption: photoCaption.trim() || file.name,
+                          };
+                          setForm((prev) => ({
+                            ...prev,
+                            photos: [...(prev.photos ?? []), newPhoto],
+                          }));
+                          setPhotoCaption("");
+                        };
+                        reader.readAsDataURL(file);
+                        e.target.value = "";
+                      }}
+                    />
+                  </label>
                 </div>
               </div>
             </div>

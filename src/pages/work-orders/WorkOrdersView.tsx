@@ -402,19 +402,7 @@ export function WorkOrdersView({
   return (
     <div className="space-y-4">
       <Card className="p-4">
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7">
-          <div className="relative xl:col-span-2">
-            <Search
-              size={16}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
-            />
-            <input
-              className="w-full rounded-lg border border-border bg-card py-2.5 pl-9 pr-4 text-sm"
-              placeholder="Search WO, title, machine…"
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-            />
-          </div>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
           <select
             className={selectCls}
             value={statusFilter}

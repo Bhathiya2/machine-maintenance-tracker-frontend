@@ -156,7 +156,7 @@ export function DashboardHeader({
               value={searchQuery}
               onChange={(event) => setSearchQuery(event.target.value)}
               onFocus={openSearch}
-              placeholder="Search machines, work orders…"
+              placeholder="Search all modules (machines, WOs, faults, users, roles…)"
               className="h-9.5 w-full rounded-full border border-border/80 bg-muted/40 pl-9 pr-16 text-xs outline-none transition-colors placeholder:text-muted-foreground focus:bg-background focus:border-ring focus:ring-2 focus:ring-ring/20"
               aria-label="Search"
               aria-expanded={showSearchResults}
@@ -178,7 +178,7 @@ export function DashboardHeader({
                   Searching…
                 </div>
               ) : searchResults.length > 0 ? (
-                <ul className="max-h-72 overflow-y-auto py-1">
+                <ul className="max-h-80 overflow-y-auto py-1">
                   {searchResults.map((item) => (
                     <li key={`${item.type}-${item.id}`}>
                       <button
