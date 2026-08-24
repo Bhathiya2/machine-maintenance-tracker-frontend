@@ -402,8 +402,8 @@ export function WorkOrdersView({
   return (
     <div className="space-y-4">
       <Card className="p-4">
-        <div className="grid grid-cols-1 gap-3 lg:grid-cols-6">
-          <div className="relative lg:col-span-2">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7">
+          <div className="relative xl:col-span-2">
             <Search
               size={16}
               className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
@@ -429,7 +429,7 @@ export function WorkOrdersView({
             ))}
           </select>
           <select
-            className={`${selectCls} min-w-[165px]`}
+            className={`${selectCls} min-w-[150px]`}
             value={technicianFilter}
             onChange={(e) => setTechnicianFilter(e.target.value)}
           >
@@ -452,20 +452,20 @@ export function WorkOrdersView({
               </option>
             ))}
           </select>
-          <div className="flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2 text-sm focus-within:ring-2 focus-within:ring-primary/30">
+          <div className="flex items-center gap-1.5 rounded-lg border border-border bg-background px-2.5 py-2 text-sm focus-within:ring-2 focus-within:ring-primary/30">
             <span className="text-xs font-semibold text-muted-foreground shrink-0 uppercase tracking-wider">From:</span>
             <input
               type="date"
-              className="w-full bg-transparent text-sm text-foreground outline-none cursor-pointer"
+              className="w-full bg-transparent text-xs text-foreground outline-none cursor-pointer"
               value={dateFrom}
               onChange={(e) => setDateFrom(e.target.value)}
             />
           </div>
-          <div className="flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2 text-sm focus-within:ring-2 focus-within:ring-primary/30">
+          <div className="flex items-center gap-1.5 rounded-lg border border-border bg-background px-2.5 py-2 text-sm focus-within:ring-2 focus-within:ring-primary/30">
             <span className="text-xs font-semibold text-muted-foreground shrink-0 uppercase tracking-wider">To:</span>
             <input
               type="date"
-              className="w-full bg-transparent text-sm text-foreground outline-none cursor-pointer"
+              className="w-full bg-transparent text-xs text-foreground outline-none cursor-pointer"
               value={dateTo}
               onChange={(e) => setDateTo(e.target.value)}
             />
