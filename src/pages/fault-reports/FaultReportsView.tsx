@@ -6,6 +6,14 @@ import { PERMISSIONS } from '@/pages/dashboard/permissions'
 import { usePermissions } from '@/hooks/permission/usePermissions'
 import { TablePaginationBar, useTablePagination } from '@/components/TablePagination'
 import { Button } from '@/components/ui/button'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
 import { Badge, Card, FormField, inputCls, selectCls } from '@/pages/dashboard/components/DashboardUI'
 import { formatDate, warrantyStatus } from '@/pages/dashboard/utils/formatters'
 import { severityColor } from '@/pages/dashboard/utils/statusHelpers'
@@ -189,49 +197,66 @@ export function FaultReportsView({
       </div>
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-5">
-        <div className="space-y-2 lg:col-span-2">
-          {pageItems.length === 0 && (
-            <p className="py-8 text-center text-sm text-muted-foreground">
-              No fault reports yet. Use <span className="font-medium">Report Fault</span> to submit one.
-            </p>
-          )}
-          {pageItems.map((f) => {
-            const isSelected = selectedId === f.id
-            return (
-              <button
-                key={f.id}
-                type="button"
-                onClick={() => setSelectedId(f.id)}
-                className={`w-full rounded-lg border p-4 text-left transition-all ${isSelected ? 'border-primary bg-primary text-white shadow-md' : 'border-border bg-card hover:border-primary/40'}`}
-              >
-                <div className="mb-1 flex items-center justify-between">
-                  <span className={`font-mono text-xs font-bold ${isSelected ? 'text-white/80' : 'text-muted-foreground'}`}>{f.id}</span>
-                  <div className="flex items-center gap-1.5">
-                    <Badge className={isSelected ? 'bg-white/20 text-white' : severityColor(f.severity)}>{f.severity}</Badge>
-                    <Badge
-                      className={
-                        isSelected
-                          ? 'bg-white/20 text-white'
-                          : f.status === 'Open'
-                            ? 'bg-red-100 text-red-700'
-                            : f.status === 'Converted'
-                              ? 'bg-green-100 text-green-700'
-                              : 'bg-gray-100 text-gray-600'
-                      }
-                    >
-                      {f.status}
-                    </Badge>
-                  </div>
-                </div>
-                <p className={`font-mono text-xs font-semibold ${isSelected ? 'text-white/90' : 'text-primary'}`}>{f.machineId}</p>
-                <p className={`mt-0.5 line-clamp-2 text-sm ${isSelected ? 'text-white/80' : 'text-foreground'}`}>{f.description}</p>
-                <p className={`mt-1.5 text-xs ${isSelected ? 'text-white/60' : 'text-muted-foreground'}`}>
-                  {formatDate(f.createdAt)} · {getUserName(f.reportedBy)}
-                </p>
-              </button>
-            )
-          })}
+        <div className="lg:col-span-2 space-y-3">
           <Card className="overflow-hidden">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/40 hover:bg-muted/40">
+                    <TableHead className="px-3 py-2 text-xs font-semibold">Report & Machine</TableHead>
+                    <TableHead className="px-3 py-2 text-xs font-semibold text-center">Priority</TableHead>
+                    <TableHead className="px-3 py-2 text-xs font-semibold text-right">Status</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {pageItems.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={3} className="py-8 text-center text-sm text-muted-foreground">
+                        No fault reports found.
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    pageItems.map((f) => {
+                      const isSelected = selectedId === f.id
+                      return (
+                        <TableRow
+                          key={f.id}
+                          onClick={() => setSelectedId(f.id)}
+                          className={`cursor-pointer transition-colors ${isSelected ? 'bg-primary/10 font-medium' : 'hover:bg-muted/50'}`}
+                        >
+                          <TableCell className="px-3 py-3">
+                            <div className="flex items-center gap-2 mb-0.5">
+                              <span className="font-mono text-xs font-bold text-foreground">{f.id}</span>
+                              <span className="font-mono text-xs text-primary font-semibold">{f.machineId}</span>
+                            </div>
+                            <p className="line-clamp-1 text-xs text-foreground/90">{f.description}</p>
+                            <p className="text-[10px] text-muted-foreground mt-1">
+                              {formatDate(f.createdAt)} · {getUserName(f.reportedBy)}
+                            </p>
+                          </TableCell>
+                          <TableCell className="px-3 py-3 align-middle text-center">
+                            <Badge className={severityColor(f.severity)}>{f.severity}</Badge>
+                          </TableCell>
+                          <TableCell className="px-3 py-3 align-middle text-right">
+                            <Badge
+                              className={
+                                f.status === 'Open'
+                                  ? 'bg-red-100 text-red-700'
+                                  : f.status === 'Converted'
+                                    ? 'bg-green-100 text-green-700'
+                                    : 'bg-gray-100 text-gray-600'
+                              }
+                            >
+                              {f.status}
+                            </Badge>
+                          </TableCell>
+                        </TableRow>
+                      )
+                    })
+                  )}
+                </TableBody>
+              </Table>
+            </div>
             <TablePaginationBar
               page={pagination.page}
               pageSize={pagination.pageSize}
