@@ -1,4 +1,4 @@
-import { AlertTriangle, ChevronRight, Cpu, Flag } from 'lucide-react'
+import { AlertTriangle, ArrowRight, BarChart2, ChevronRight, Cpu, Flag } from 'lucide-react'
 import { Badge, Card } from '@/pages/dashboard/components/DashboardUI'
 import { fmtCurrency, formatDate, warrantyStatus } from '@/pages/dashboard/utils/formatters'
 import { machineStatusIcon, priorityColor, severityColor, statusColor, woStatusColor, woStatusIcon } from '@/pages/dashboard/utils/statusHelpers'
@@ -35,19 +35,39 @@ export function DashboardView({
             <div className="h-1 bg-green-500 rounded-full" style={{ width: `${(stats.operational / stats.total) * 100}%` }} />
           </div>
         </Card>
-        <Card className="p-5">
-          <p className="text-xs font-mono text-muted-foreground uppercase tracking-widest">Open Faults</p>
-          <p className={`text-3xl font-bold mt-1 ${openFaults.length > 0 ? "text-red-600" : "text-green-600"}`}>{openFaults.length}</p>
-          <button onClick={() => onNavigate("faults")} className="text-xs font-mono text-foreground hover:text-foreground transition-colors mt-1">
-            View fault reports →
-          </button>
+        <Card className="p-5 flex flex-col justify-between">
+          <div>
+            <p className="text-xs font-mono text-muted-foreground uppercase tracking-widest">Open Faults</p>
+            <p className={`text-3xl font-bold mt-1 ${openFaults.length > 0 ? "text-red-600" : "text-green-600"}`}>{openFaults.length}</p>
+          </div>
+          <div>
+            <button
+              type="button"
+              onClick={() => onNavigate("faults")}
+              className="mt-3 inline-flex items-center gap-1.5 rounded-lg border border-red-200 bg-red-50/90 px-3 py-1.5 text-xs font-semibold text-red-700 shadow-sm transition-all hover:bg-red-600 hover:text-white hover:shadow dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300 dark:hover:bg-red-600 dark:hover:text-white cursor-pointer group"
+            >
+              <Flag size={13} className="shrink-0" />
+              <span>View fault reports</span>
+              <ArrowRight size={13} className="shrink-0 transition-transform group-hover:translate-x-0.5" />
+            </button>
+          </div>
         </Card>
-        <Card className="p-5">
-          <p className="text-xs font-mono text-muted-foreground uppercase tracking-widest">Total Repair Cost YTD</p>
-          <p className="text-3xl font-bold text-foreground mt-1">{fmtCurrency(totalRepairCost)}</p>
-          <button onClick={() => onNavigate("analytics")} className="text-xs font-mono text-foreground hover:text-foreground transition-colors mt-1">
-            View analytics →
-          </button>
+        <Card className="p-5 flex flex-col justify-between">
+          <div>
+            <p className="text-xs font-mono text-muted-foreground uppercase tracking-widest">Total Repair Cost YTD</p>
+            <p className="text-3xl font-bold text-foreground mt-1">{fmtCurrency(totalRepairCost)}</p>
+          </div>
+          <div>
+            <button
+              type="button"
+              onClick={() => onNavigate("analytics")}
+              className="mt-3 inline-flex items-center gap-1.5 rounded-lg border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary shadow-sm transition-all hover:bg-primary hover:text-primary-foreground hover:shadow cursor-pointer group"
+            >
+              <BarChart2 size={13} className="shrink-0" />
+              <span>View analytics</span>
+              <ArrowRight size={13} className="shrink-0 transition-transform group-hover:translate-x-0.5" />
+            </button>
+          </div>
         </Card>
       </div>
 

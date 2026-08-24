@@ -110,30 +110,23 @@ export function DashboardHeader({
   }
 
   return (
-    <header className="sticky top-0 z-20 border-b border-border/80 bg-card/85 backdrop-blur-md supports-[backdrop-filter]:bg-card/75">
-      <div className="flex items-center gap-3 px-4 py-3 sm:px-5 lg:px-6">
-        <Button
-          type="button"
-          variant="outline"
-          size="icon"
-          className="size-9 shrink-0 lg:hidden"
-          onClick={onOpenNav}
-          aria-label="Open navigation"
-        >
-          <Menu className="size-4" />
-        </Button>
+    <header className="sticky top-0 z-20 border-b border-border/70 bg-card/90 backdrop-blur-md supports-[backdrop-filter]:bg-card/80 shadow-xs">
+      <div className="flex h-16 items-center justify-between gap-4 px-4 sm:px-6">
+        {/* Left: Mobile Nav toggle + Page Breadcrumb & Title */}
+        <div className="flex items-center gap-3 min-w-0">
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            className="size-9 shrink-0 lg:hidden"
+            onClick={onOpenNav}
+            aria-label="Open navigation"
+          >
+            <Menu className="size-4" />
+          </Button>
 
-        <div className="min-w-0 flex-1">
-          <nav className="mb-1 flex items-center gap-1 text-[11px] text-muted-foreground">
-            <span className="hidden font-medium sm:inline">MachineTrack</span>
-            <ChevronRight className="hidden size-3 sm:inline" />
-            <span className="font-medium text-foreground/80">
-              {VIEW_LABELS[view]}
-            </span>
-          </nav>
-
-          <div className="flex items-center gap-3">
-            <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
               {view === "finance" ? (
                 <span className="text-sm font-bold leading-none">৳</span>
               ) : (
@@ -141,23 +134,22 @@ export function DashboardHeader({
               )}
             </div>
             <div className="min-w-0">
-              <h1 className="truncate text-lg font-semibold tracking-tight text-foreground sm:text-xl">
-                {VIEW_LABELS[view]}
-              </h1>
-              <p className="hidden truncate text-xs text-muted-foreground sm:block">
-                {VIEW_DESCRIPTIONS[view] ??
-                  `${currentUser.site} · ${currentUser.role}`}
-              </p>
+              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <span className="font-semibold text-foreground/90">{VIEW_LABELS[view]}</span>
+                <span className="text-muted-foreground/60">•</span>
+                <span className="truncate text-muted-foreground hidden sm:inline">{currentUser.site}</span>
+              </div>
             </div>
           </div>
         </div>
 
+        {/* Center: Global Search Bar */}
         <div
           ref={searchPanelRef}
-          className="relative hidden max-w-xs flex-1 md:block lg:max-w-sm"
+          className="relative hidden flex-1 max-w-sm md:block"
         >
           <div className="relative">
-            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground/70" />
             <input
               ref={searchRef}
               type="search"
@@ -165,12 +157,12 @@ export function DashboardHeader({
               onChange={(event) => setSearchQuery(event.target.value)}
               onFocus={openSearch}
               placeholder="Search machines, work orders…"
-              className="h-9 w-full rounded-lg border border-border bg-background/80 pl-9 pr-16 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-ring focus:ring-2 focus:ring-ring/20"
+              className="h-9.5 w-full rounded-full border border-border/80 bg-muted/40 pl-9 pr-16 text-xs outline-none transition-colors placeholder:text-muted-foreground focus:bg-background focus:border-ring focus:ring-2 focus:ring-ring/20"
               aria-label="Search"
               aria-expanded={showSearchResults}
               aria-controls="dashboard-global-search"
             />
-            <kbd className="pointer-events-none absolute right-2 top-1/2 hidden -translate-y-1/2 items-center rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground lg:inline-flex">
+            <kbd className="pointer-events-none absolute right-2.5 top-1/2 hidden -translate-y-1/2 items-center rounded border border-border/80 bg-background px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground/80 lg:inline-flex">
               Ctrl K
             </kbd>
           </div>
@@ -218,71 +210,61 @@ export function DashboardHeader({
           )}
         </div>
 
+        {/* Right: Actions & User Menu */}
         <div className="flex shrink-0 items-center gap-2">
-          <div
-            className={cn(
-              "hidden items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide lg:flex",
-              !isOnline
-                ? "border-border bg-muted text-muted-foreground"
-                : isAway
-                  ? "border-amber-200 bg-amber-50 text-amber-700"
-                  : "border-emerald-200 bg-emerald-50 text-emerald-700",
-            )}
-          >
-            <span
-              className={cn(
-                "size-1.5 rounded-full",
-                !isOnline
-                  ? "bg-muted-foreground"
-                  : isAway
-                    ? "bg-amber-500"
-                    : "animate-pulse bg-emerald-500",
-              )}
-            />
-            {!isOnline ? "Offline" : isAway ? "Away" : "Online"}
-          </div>
-
           {openFaultCount > 0 && (
             <Button
               variant="outline"
               size="sm"
-              className="hidden h-8 border-red-200 bg-red-50 text-red-700 hover:bg-red-100 sm:inline-flex"
+              className="hidden h-8 gap-1.5 border-red-200/80 bg-red-50/80 text-red-700 hover:bg-red-100 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300 sm:inline-flex text-xs font-medium"
               onClick={() => navigate(VIEW_ROUTES.faults)}
             >
               <Flag className="size-3.5" />
-              {openFaultCount} open fault report{openFaultCount > 1 ? "s" : ""}
+              <span>{openFaultCount} open fault{openFaultCount > 1 ? "s" : ""}</span>
             </Button>
           )}
 
           <Button
             variant="outline"
             size="icon"
-            className="relative size-9"
+            className="relative size-9 rounded-full"
             onClick={() => navigate(VIEW_ROUTES.notifications)}
             aria-label="Notifications"
           >
             <Bell className="size-4" />
             {unreadCount > 0 && (
-              <span className="absolute -right-1 -top-1 flex size-4.5 items-center justify-center rounded-full bg-primary text-[9px] font-bold text-primary-foreground ring-2 ring-card">
+              <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-red-600 text-[9px] font-bold text-white ring-2 ring-card">
                 {unreadCount > 9 ? "9+" : unreadCount}
               </span>
             )}
           </Button>
 
+          <div className="h-4 w-px bg-border/80 mx-0.5 hidden sm:block" />
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button
                 type="button"
-                className="flex items-center gap-2 rounded-xl border border-border bg-background px-2 py-1.5 pl-1.5 transition-colors hover:bg-muted/60"
+                className="flex items-center gap-2 rounded-full border border-border/80 bg-card p-1 pr-2.5 transition-colors hover:bg-muted/60 cursor-pointer"
               >
-                <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-xs font-bold text-primary-foreground">
+                <div className="relative flex size-7 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
                   {userInitials(displayName)}
+                  <span
+                    className={cn(
+                      "absolute -bottom-0.5 -right-0.5 size-2.5 rounded-full ring-2 ring-card",
+                      !isOnline
+                        ? "bg-muted-foreground"
+                        : isAway
+                          ? "bg-amber-500"
+                          : "bg-emerald-500"
+                    )}
+                  />
                 </div>
                 <div className="hidden min-w-0 text-left sm:block">
-                  <p className="max-w-[120px] truncate text-xs font-semibold leading-tight">
+                  <p className="max-w-[110px] truncate text-xs font-semibold leading-tight text-foreground">
                     {displayName}
                   </p>
-                  <p className="truncate text-[10px] font-mono text-muted-foreground">
+                  <p className="truncate text-[10px] text-muted-foreground">
                     {currentUser.role}
                   </p>
                 </div>
@@ -294,6 +276,10 @@ export function DashboardHeader({
                 <p className="text-xs font-normal text-muted-foreground">
                   {authUser?.email ?? "Signed in"}
                 </p>
+                <div className="mt-1.5 flex items-center gap-1.5 text-[10px] font-medium text-emerald-600 dark:text-emerald-400">
+                  <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  Status: {isOnline ? (isAway ? "Away" : "Online") : "Offline"}
+                </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>

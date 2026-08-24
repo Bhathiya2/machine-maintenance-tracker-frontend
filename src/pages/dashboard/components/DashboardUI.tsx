@@ -28,6 +28,8 @@ export function FormField({ label, children }: { label: ReactNode; children: Rea
 }
 
 export const inputCls =
-  'w-full border border-border rounded-lg px-3 py-2.5 text-sm bg-input-background focus:outline-none focus:ring-2 focus:ring-primary/30'
+  'w-full border border-border rounded-lg px-3 py-2.5 text-sm bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-colors'
 
-export const selectCls = inputCls + ' font-mono'
+export const selectCls =
+  'w-full border border-border rounded-lg pl-3 pr-9 py-2.5 text-sm bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-colors'
+

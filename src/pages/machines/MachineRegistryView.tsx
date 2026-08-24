@@ -582,7 +582,25 @@ export function MachineRegistryView({
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField label="Site">
-                      <select className={selectCls} value={form.site} onChange={(event) => setForm({ ...form, site: event.target.value })}>
+                      <select
+                        className={selectCls}
+                        value={form.site}
+                        onChange={(event) => {
+                          const siteVal = event.target.value
+                          const sitePresets: Record<string, { group: string; factory: string }> = {
+                            'Plant A': { group: 'North America Manufacturing', factory: 'Detroit Assembly' },
+                            'Plant B': { group: 'North America Manufacturing', factory: 'Ohio Stamping Plant' },
+                            'Plant C': { group: 'European Operations', factory: 'Stuttgart Precision' },
+                            'Plant D': { group: 'Asia Pacific Mfg', factory: 'Yokohama Machining' },
+                          }
+                          const preset = sitePresets[siteVal]
+                          setForm({
+                            ...form,
+                            site: siteVal,
+                            ...(preset ? { factoryGroup: preset.group, factory: preset.factory } : {}),
+                          })
+                        }}
+                      >
                         {SITES.map((site) => (
                           <option key={site} value={site}>
                             {site}
@@ -603,17 +621,23 @@ export function MachineRegistryView({
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField label="Factory Group">
                       <input
-                        className={inputCls}
+                        type="text"
+                        className={`${inputCls} bg-background text-foreground cursor-text`}
                         placeholder="e.g. North America Manufacturing"
                         value={form.factoryGroup}
+                        readOnly={false}
+                        disabled={false}
                         onChange={(event) => setForm({ ...form, factoryGroup: event.target.value })}
                       />
                     </FormField>
                     <FormField label="Factory">
                       <input
-                        className={inputCls}
+                        type="text"
+                        className={`${inputCls} bg-background text-foreground cursor-text`}
                         placeholder="e.g. Detroit Assembly"
                         value={form.factory}
+                        readOnly={false}
+                        disabled={false}
                         onChange={(event) => setForm({ ...form, factory: event.target.value })}
                       />
                     </FormField>
@@ -621,9 +645,12 @@ export function MachineRegistryView({
 
                   <FormField label="Installed By">
                     <input
-                      className={inputCls}
+                      type="text"
+                      className={`${inputCls} bg-background text-foreground cursor-text`}
                       placeholder="Technician or Engineer Name"
                       value={form.installedBy}
+                      readOnly={false}
+                      disabled={false}
                       onChange={(event) => setForm({ ...form, installedBy: event.target.value })}
                     />
                   </FormField>

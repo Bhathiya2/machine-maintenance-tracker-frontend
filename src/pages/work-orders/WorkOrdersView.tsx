@@ -429,7 +429,7 @@ export function WorkOrdersView({
             ))}
           </select>
           <select
-            className={selectCls}
+            className={`${selectCls} min-w-[165px]`}
             value={technicianFilter}
             onChange={(e) => setTechnicianFilter(e.target.value)}
           >
