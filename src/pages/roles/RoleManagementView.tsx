@@ -193,10 +193,11 @@ export function RoleManagementView() {
                       <Shield className="size-4 text-primary" />
                       <span className="font-semibold">{role.name}</span>
                       {role.is_super_admin && <Badge className="bg-red-600 text-white">Super Admin</Badge>}
-                      {role.is_system && !role.is_super_admin && <Badge>System</Badge>}
                     </div>
-                    <p className="mt-1 text-sm text-muted-foreground">{role.description || 'No description'}</p>
-                    <p className="mt-1 text-xs font-mono text-muted-foreground">
+                    {role.description && !role.description.toLowerCase().endsWith('system role') && (
+                      <p className="mt-1 text-sm text-muted-foreground">{role.description}</p>
+                    )}
+                    <p className="mt-0.5 text-xs font-mono text-muted-foreground">
                       {role.permissions.length} permission(s) · {role.users_count ?? 0} user(s)
                     </p>
                   </div>
